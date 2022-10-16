@@ -1,4 +1,5 @@
-SRCS 		:= main.c functions.c
+vpath		%.c		./src
+SRCS 		:= main.c functions.c constants.c
 TARGET 		:= main
 CC 			:= gcc
 OPTS 		:= -Wall
