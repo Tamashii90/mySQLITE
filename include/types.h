@@ -29,7 +29,7 @@ typedef struct Statement {
 
 Table *newTable();
 char* readInput();
-void parseMetaCmd(char *);
+void parseMetaCmd(Table *, char *);
 void parseSqlCmd(Table *, char *);
 void executeSelect(Table *, char *);
 void executeInsert(Table *, char *);

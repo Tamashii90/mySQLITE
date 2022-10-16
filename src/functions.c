@@ -14,9 +14,10 @@ char* readInput() {
     return res;
 }
 
-void parseMetaCmd(char *input) {
+void parseMetaCmd(Table *table, char *input) {
     if (!strcmp(input, ".exit")) {
         free(input);
+        free(table);
         exit(0);
     } else {
         printf("Unrecognized command '%s'\n", input);
@@ -32,15 +33,22 @@ Table *newTable() {
     return table;
 }
 
+void freeTable(Table *table) {
+    for (size_t i = 0; table->pages[i] != NULL; i++) {
+        free(table->pages[i]);
+    }
+    free(table);
+}
+
 void *getRowAddress(Table *table, size_t rowNum) {
     size_t pageNum = rowNum / ROWS_PER_PAGE;
     void *page = table->pages[pageNum];
     if (page == NULL) {
         page = table->pages[pageNum] = malloc(PAGE_SIZE);
     }
-        size_t rowOffset = rowNum % ROWS_PER_PAGE;
-        size_t byteOffset = rowOffset * ROW_SIZE;
-        return page + byteOffset;
+    size_t rowOffset = rowNum % ROWS_PER_PAGE;
+    size_t byteOffset = rowOffset * ROW_SIZE;
+    return page + byteOffset;
     return page;
 }
 

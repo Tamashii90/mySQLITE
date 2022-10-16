@@ -16,7 +16,7 @@ int main(void) {
             puts("Something went wrong..");
         }
 
-        if (inputStr[0] == '.') parseMetaCmd(inputStr);
+        if (inputStr[0] == '.') parseMetaCmd(table, inputStr);
         else parseSqlCmd(table, inputStr);
     }
 }
