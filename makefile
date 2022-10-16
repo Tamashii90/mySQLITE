@@ -1,10 +1,10 @@
-vpath		%.c		./src
-SRCS 		:= main.c functions.c constants.c
-TARGET 		:= main
-CC 			:= gcc
-OPTS 		:= -Wall
-OBJ_DIR		:= ./obj
-OBJS 		:= $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
+SRC_DIR        := ./src
+SRCS           := $(wildcard $(SRC_DIR)/*.c)
+TARGET         := main
+CC             := gcc
+OPTS           := -Wall
+OBJ_DIR        := ./obj
+OBJS           := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
 
 # --------------------------------------------------
@@ -12,7 +12,7 @@ OBJS 		:= $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
 $(TARGET): $(OBJS)
 	$(CC) -o $(TARGET) $(OBJS)
 
-$(OBJ_DIR)/%.o: %.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(OPTS) -c $< -o $@
 
 run: $(TARGET)
