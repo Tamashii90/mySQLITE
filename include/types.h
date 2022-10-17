@@ -6,7 +6,7 @@
 
 
 typedef struct Row {
-    int id;
+    short id;
     char username[23];
     char email[255];
 } Row;

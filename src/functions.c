@@ -60,16 +60,24 @@ void serializeRow(Row *source, void *destination) {
 
 void executeInsert(Table *table, char *statement) {
     int argc = 0;
-    Row row;
-    argc = sscanf(statement, "insert %d %s %s", &(row.id), row.username, row.email);
+    short inputId = 0;
+    char username[USERNAME_SIZE];
+    char email[EMAIL_SIZE];
+
+    argc = sscanf_s(statement, "insert %hd %s %s", &inputId, username, USERNAME_SIZE - 1, email, EMAIL_SIZE - 1);
     if (argc < 3) puts("Invalid insert syntax.");
+    else if (inputId < 0) puts("Error: id must be positive.");
     else if (table->numOfRows >= TABLE_MAX_ROWS) puts("Table is full..");
     else {
+        Row row;
+        row.id = inputId;
+        strcpy(row.username, username);
+        strcpy(row.email, email);
         void *rowAddress = getRowAddress(table, table->numOfRows);
         // printf("Row address: %p\n", rowAddress);
         serializeRow(&row, rowAddress);
         table->numOfRows++;
-        printf("Inserted 1 row. Current rows: %zu\n", table->numOfRows);
+        printf("Row inserted. Current rows: %zu\n", table->numOfRows);
     }
 }
 
