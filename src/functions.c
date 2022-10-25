@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 char* readInput() {
-    size_t size = 255;
+    size_t size = 1024; // Any value that fits the max size of all inputs
     char *input = malloc(size);
     char *res = fgets(input, size, stdin);
     if (res != NULL) {
@@ -60,13 +60,13 @@ void serializeRow(Row *source, void *destination) {
 
 void executeInsert(Table *table, char *statement) {
     int argc = 0;
-    short inputId = 0;
+    short inputId = 0; // max value of short is 2^15 - 1 = 32767
     char username[USERNAME_SIZE];
     char email[EMAIL_SIZE];
 
-    argc = sscanf_s(statement, "insert %hd %s %s", &inputId, username, USERNAME_SIZE - 1, email, EMAIL_SIZE - 1);
+    argc = sscanf_s(statement, "insert %hu %s %s", &inputId, username, USERNAME_SIZE, email, EMAIL_SIZE);
     if (argc < 3) puts("Invalid insert syntax.");
-    else if (inputId < 0) puts("Error: id must be positive.");
+    else if (inputId <= 0) puts("Error: id must be from 1 to 32767.");
     else if (table->numOfRows >= TABLE_MAX_ROWS) puts("Table is full..");
     else {
         Row row;
@@ -90,9 +90,10 @@ void deserializeRow(void *source, Row *destination) {
 void executeSelect(Table *table, char *input) {
     Row row;
     // This is more elegant than looping over each row in each page.
+    puts("Returned rows:");
     for (size_t i = 0; i < table->numOfRows; i++) {
         deserializeRow(getRowAddress(table, i), &row);
-        printf("%d %s %s\n", row.id, row.username, row.email);
+        printf("%9s | %d | %s | %s |\n", "", row.id, row.username, row.email);
     }
     // for (size_t i = 0; i < TABLE_MAX_PAGES; i++) {
     // 	void *page = table->pages[i];

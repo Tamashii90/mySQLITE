@@ -7,8 +7,8 @@
 
 typedef struct Row {
     short id;
-    char username[23];
-    char email[255];
+    char username[21];
+    char email[256];
 } Row;
 
 typedef struct Table {
